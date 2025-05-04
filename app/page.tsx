@@ -4,14 +4,15 @@ import { PlusCircle } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import CategoryFilter from './components/CategoryFilter';
 import Hero from './components/Hero';
 import Navbar from './components/Navbar';
 import ResourcesList from './components/ResourcesList';
 import { CATEGORIES, ResourceCategory } from './data/resources';
 
-export default function Home() {
+// Component that handles search parameters
+function HomeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -137,6 +138,19 @@ export default function Home() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Loading fallback for Suspense
+function HomeLoading() {
+  return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<HomeLoading />}>
+      <HomeContent />
+    </Suspense>
   );
 }
 
